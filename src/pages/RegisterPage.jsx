@@ -10,6 +10,8 @@ function RegisterPage() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
+    const [firstName, setFirstName] = useState("")
+    const [lastName, setLastName] = useState("")
     const [errors, setErrors] = useState("")
     const [isLoading, setIsLoading] = useState(false)
 
@@ -26,6 +28,8 @@ function RegisterPage() {
                 email,
                 password,
                 confirm_password: confirmPassword,
+                first_name: firstName,
+                last_name: lastName,
             }
 
             await axios.post(
@@ -57,6 +61,14 @@ function RegisterPage() {
             <label htmlFor="username">Username</label>
             <input id="username" type="text" value={username} onChange={(e) => setUsername(e.target.value)}/>
             <FormError error={errors.username} />
+
+            <label htmlFor="firstName">First Name</label>
+            <input id="firstName" type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)}/>
+            <FormError error={errors.first_name} />
+
+            <label htmlFor="lastName">Last Name</label>
+            <input id="lastName" type="text" value={lastName} onChange={(e) => setLastName(e.target.value)}/>
+            <FormError error={errors.last_name} />
             
 
             <label htmlFor="email">Email</label>
