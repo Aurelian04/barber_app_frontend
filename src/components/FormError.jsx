@@ -5,7 +5,7 @@ function FormError({ error }) {
 
     return (
         <p>
-            {error[0]}
+            {Array.isArray(error) ? error[0] : error}
         </p>
     )
 }

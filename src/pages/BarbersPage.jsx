@@ -1,5 +1,7 @@
 import api from "../api/axios";
 import { useState, useEffect } from "react";
+import FormError from "../components/FormError";
+import { Link } from "react-router";
 
 function BarbersPage() {
     const [barbers, setBarbers] = useState([])
@@ -31,8 +33,21 @@ function BarbersPage() {
 
     return(
         <div>
-            {loading && <p>Se incarca...</p>}
-            All Barbers and thier services:
+            <div>
+                {loading && <p>Se incarca...</p>}
+                All Barbers and thier services:
+            </div>
+
+            <FormError error={errors.general} />
+
+            <div>
+                <h2>Lista cu frizerii:</h2>
+                {barbers.map((barber) => (
+                    <Link key={barber.id} to={`/services/${barber.id}`}>
+                        <div>{barber.first_name} {barber.last_name}</div>
+                    </Link>
+                ))}
+            </div>
         </div>
 
 
