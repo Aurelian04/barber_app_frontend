@@ -1,7 +1,7 @@
 import api from "../api/axios"
 import { useState, useEffect } from "react"
 import FormError from "../components/FormError"
-import { useParams } from "react-router"
+import { Link, useParams } from "react-router"
 
 
 function ServicesPage() {
@@ -38,7 +38,24 @@ function ServicesPage() {
 
 
     return(
-        <h1>ServicesPage</h1>
+        <div>
+            <div>
+                {loading && <p>Se incarca...</p>}
+                Barber services
+            </div>
+
+            <FormError error={errors.general} />
+
+            <div>
+                <h2>All services:</h2>
+                {services.map((service) => (
+                    <Link key={service.id} to={`/availability/${barberId}/${service.id}`}>
+                        <div>{service.name}</div>
+                    </Link>
+                ))}
+            </div>
+
+        </div>
     )
 }
 

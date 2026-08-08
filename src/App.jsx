@@ -6,6 +6,7 @@ import LoginPage from "./pages/LoginPage"
 import RegisterPage from "./pages/RegisterPage"
 import ServicesPage from "./pages/ServicesPage"
 import BarbersPage from "./pages/BarbersPage"
+import AvailabilityPage from "./pages/AvailabilityPage"
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/barbers" element={<BarbersPage />} />
         <Route path="/services/:barberId" element={<ServicesPage />} />
+        <Route path="/availability/:barberId/:serviceId" element={<AvailabilityPage />} />
       </Routes>
     </>
   )
