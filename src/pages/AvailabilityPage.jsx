@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import api from "../api/axios"
 import { useParams } from "react-router"
+import FormError from "../components/FormError"
 
 function AvailabilityPage(){
     const [errors, setErrors] = useState("")
@@ -16,21 +17,43 @@ function AvailabilityPage(){
     const [date, setDate] = useState(dateString)
     const{ barberId, serviceId} = useParams()
 
-        async function availability() {
+        async function fetchAvailability() {
 
             setErrors({})
             setLoading(true)
 
             try{
                 const response = await api.get(`barber/available-slots/?barber=${barberId}&service=${serviceId}&date=${date}`)
-                setAvailableSlots(response.data)
+                setAvailableSlots(response.data.slots)
+            } catch (error) {
+                if (error.response) {
+                    setErrors({ general: error.response.data.detail || "A apărut o eroare." })
+                } else {
+                    setErrors({general: "Could not connect to the server."})
+                }
+            } finally {
+                setLoading(false)
             }
 
         }
 
+        useEffect(() => {
+            fetchAvailability()
+        },[date])
 
-    return 
 
+    return(
+        <div>
+            <div>
+                {loading && <p>Se incarca...</p>}
+                Available slots:
+            </div>
+
+            <FormError error={errors.general} />
+
+        </div>
+    ) 
+        
 }
 
 export default AvailabilityPage

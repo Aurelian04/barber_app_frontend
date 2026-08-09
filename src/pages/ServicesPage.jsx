@@ -20,7 +20,7 @@ function ServicesPage() {
             setServices(response.data)
         } catch (error){
             if (error.response){
-                setErrors(error.response.data)
+                setErrors({ general: error.response.data.detail || "A apărut o eroare." })
             } else {
                 setErrors({general: "Could not connect to the server."})
             }
@@ -33,9 +33,6 @@ function ServicesPage() {
         fetchServices()
     },[])
     
-
-
-
 
     return(
         <div>
