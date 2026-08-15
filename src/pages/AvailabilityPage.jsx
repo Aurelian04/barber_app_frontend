@@ -7,6 +7,7 @@ function AvailabilityPage(){
     const [errors, setErrors] = useState("")
     const [loading, setLoading] = useState("")
     const [availableSlots, setAvailableSlots] = useState([])
+    const [selectedSlot, setSelectedSlot] = useState(null)
     const today = new Date()
     const year = today.getFullYear()
     const month = today.getMonth() + 1
@@ -50,6 +51,20 @@ function AvailabilityPage(){
             </div>
 
             <FormError error={errors.general} />
+
+            <input type="date" 
+                value={date}
+                onChange={(event) => setDate(event.target.value)} 
+            />
+
+            <div>
+                <h2>Available slots are:</h2>
+                {availableSlots.map((slot) => (
+                    <button key={slot} onClick={() => selectedSlot(slot)}>
+                        {slot.slice(11, 16)}
+                    </button>
+                ))}
+            </div>
 
         </div>
     ) 
