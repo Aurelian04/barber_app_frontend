@@ -17,6 +17,9 @@ function AvailabilityPage(){
     const dateString = `${year}-${monthStr}-${dayStr}`
     const [date, setDate] = useState(dateString)
     const{ barberId, serviceId} = useParams()
+    const [bookingError, setBookingError] = useState("")
+    const [bookingLoading, setBookingLoading] = useState("")
+    const [bookingSuccess, setBookingSuccess] = useState("")
 
         async function fetchAvailability() {
 
@@ -42,6 +45,34 @@ function AvailabilityPage(){
             fetchAvailability()
         },[date])
 
+        async function bookAppointment() {
+
+            setBookingError("")
+            setBookingLoading(true)
+
+            const data = {
+                barber: barberId,
+                service: serviceId,
+                start_time: selectedSlot,
+            }
+
+            try{
+
+                await api.post("appointments/", data)
+                setBookingSuccess("Appointment sent successfully.")
+
+            } catch(error) {
+                if (error.response) {
+                    setBookingError({general: error.response.data.detail || "A aparut o eroare."})
+                } else {
+                    setBookingError({general: "Could not connect to the server."})
+                }
+            } finally {
+                setBookingLoading(false)
+            }
+
+        }
+
 
     return(
         <div>
@@ -59,11 +90,22 @@ function AvailabilityPage(){
 
             <div>
                 <h2>Available slots are:</h2>
-                {availableSlots.map((slot) => (
-                    <button key={slot} onClick={() => selectedSlot(slot)}>
-                        {slot.slice(11, 16)}
-                    </button>
-                ))}
+                {availableSlots.map((slot) => {
+                    const isSelected = slot === selectedSlot
+                    return (
+                        <button style={{ backgroundColor: isSelected ? "lightgreen" : "white" }} key={slot} onClick={() => setSelectedSlot(slot)}>
+                            {slot.slice(11, 16)}
+                        </button>
+                    )
+                })}
+
+            <button 
+                type="button"
+                onClick={bookAppointment}
+                disabled={bookingLoading}>
+                    {bookingLoading ? "Booking your appontment..." : "Book appointment"}
+
+            </button>
             </div>
 
         </div>
