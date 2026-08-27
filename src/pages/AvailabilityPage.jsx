@@ -48,6 +48,7 @@ function AvailabilityPage(){
         async function bookAppointment() {
 
             setBookingError("")
+            setBookingSuccess("")
             setBookingLoading(true)
 
             const data = {
@@ -102,10 +103,17 @@ function AvailabilityPage(){
             <button 
                 type="button"
                 onClick={bookAppointment}
-                disabled={bookingLoading}>
-                    {bookingLoading ? "Booking your appontment..." : "Book appointment"}
+                disabled={bookingLoading || selectedSlot === null}>
+                    {bookingLoading ? "Booking your appointment..." : "Book appointment"}
 
             </button>
+
+            <FormError error={bookingError.general} />
+
+            <div>
+                {bookingSuccess && <p>{bookingSuccess}</p>}
+            </div>
+
             </div>
 
         </div>
