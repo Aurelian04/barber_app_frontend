@@ -61,6 +61,8 @@ function AvailabilityPage(){
 
                 await api.post("appointments/", data)
                 setBookingSuccess("Appointment sent successfully.")
+                setSelectedSlot(null)
+                fetchAvailability()
 
             } catch(error) {
                 if (error.response) {
