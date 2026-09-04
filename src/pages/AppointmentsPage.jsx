@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import api from "../api/axios"
 
 function AppointmentsPage(){
@@ -8,6 +8,7 @@ function AppointmentsPage(){
     const [cancelId, setCancelId] = useState("")
     const [errors, setErrors] = useState("")
     const [cancelError, setCancelError] = useState("")
+
 
     async function fetchAppointments() {
         
@@ -25,6 +26,31 @@ function AppointmentsPage(){
             }
         } finally {
             setLoading(false)
+        }
+    }
+
+    useEffect(() => {
+        fetchAppointments()
+    },[])
+
+    async function cancelAppointment(id) {
+        
+        setCancelError({})
+        setCancelLoading(true)
+        setCancelId(id)
+
+        try{
+            await api.post(`appointments/${id}/cancel/`)
+            fetchAppointments()
+        } catch(error) {
+            if (error.response) {
+                setCancelError({general: error.response.data.detail || "A aparut o eroare."})
+            } else {
+                setCancelError({general: "Could not connect to the server."})
+            }
+        } finally {
+            setCancelLoading(false)
+            setCancelId("")
         }
     }
 
