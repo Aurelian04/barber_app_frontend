@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import api from "../api/axios"
+import FormError from "../components/FormError"
 
 function AppointmentsPage(){
     const [appointments, setAppointments] = useState([])
@@ -53,6 +54,34 @@ function AppointmentsPage(){
             setCancelId("")
         }
     }
+
+    return(
+        <div>
+            <div>
+                {loading && <p>Se incarca...</p>}
+                Your appointments are:
+            </div>
+
+            <FormError error={errors.general} />
+
+            <div>
+                {appointments.map((appointment) => {
+                    const isCancelling = appointment.id === cancelId
+                    return(
+                        <div key={appointment.id}>
+                            {appointment.start_time} - {appointment.status}
+                            {appointment.status === "booked" && (
+                                <button disabled={isCancelling} onClick={() => cancelAppointment(appointment.id)}>
+                                    {isCancelling ? "Is cancelling..." : "Cancel"}
+                                </button>
+                            )}
+                        </div>
+                    )
+                })}
+            </div>
+
+        </div>
+    )
 
 }
 
