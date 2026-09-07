@@ -80,6 +80,8 @@ function AppointmentsPage(){
                 })}
             </div>
 
+            <FormError error={cancelError.general} />
+
         </div>
     )
 
