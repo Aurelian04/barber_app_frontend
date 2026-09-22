@@ -1,10 +1,17 @@
 import { useEffect, useState } from "react"
 import api from "../api/axios"
 
+
 function BarberAppointmentsPage(){
     const [loading, setLoading] = useState("")
     const [errors, setErrors] = useState("")
     const [appointments, setAppointments] = useState([])
+    const [cancelError, setCancelError] = useState("")
+    const [cancelLoading, setCancelLoading] = useState("")
+    const [cancelId, setCancelId] = useState("")
+    const [completeError, setCompleteError] = useState("")
+    const [completeLoading, setCompleteLoading] = useState("")
+    const [completeId, setCompleteId] = useState("")
 
     async function fetchAppointments() {
 
@@ -31,7 +38,50 @@ function BarberAppointmentsPage(){
 
     async function cancelAppointment(id) {
         
+        setCancelError({})
+        setCancelLoading(true)
+        setCancelId(id)
+
+        try{
+            await api.post(`barber/appointments/${id}/cancel/`)
+            fetchAppointments()
+        } catch(error) {
+            if (error.response) {
+                setCancelError({ general: error.response.data.detail || "A aparut o eroare."})
+            } else {
+                setCancelError({ general: "Could not connect to the server."})
+            }
+        } finally {
+            setCancelLoading(false)
+            setCancelId("")
+        }
+
     }
+
+    async function completeAppointment(id) {
+        
+        setCompleteError({})
+        setCompleteLoading(true)
+        setCompleteId(id)
+
+        try{
+            await api.post(`barber/appointments/${id}/complete/`)
+            fetchAppointments()
+        } catch(error) {
+            if (error.response) {
+                setCompleteError({general: error.response.data.detail || "A aparut o eroare."})
+            } else {
+                setCompleteError({general: "Could not connect to the server."})
+            }
+        } finally {
+            setCompleteLoading(false)
+            setCompleteId("")
+        }
+    }
+
+    return(
+        
+    )
 
 }
 
