@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import api from "../api/axios"
+import FormError from "../components/FormError"
 
 
 function BarberAppointmentsPage(){
@@ -80,7 +81,25 @@ function BarberAppointmentsPage(){
     }
 
     return(
-        
+        <div>
+            <div>
+                {loading && <p>Se incarca...</p>}
+                <p>Your appointments are:</p>
+            </div>
+
+            <FormError error={errors.general} />
+
+            <div>
+                {appointments.map((appointment) => {
+                    return(
+                        <div key={appointment.id}>
+                            {appointment.start_time} - {appointment.status}
+                        </div>
+                    )
+                })}
+            </div>
+
+        </div>
     )
 
 }
