@@ -4,14 +4,14 @@ import FormError from "../components/FormError"
 
 
 function BarberAppointmentsPage(){
-    const [loading, setLoading] = useState("")
-    const [errors, setErrors] = useState("")
+    const [loading, setLoading] = useState(false)
+    const [errors, setErrors] = useState({})
     const [appointments, setAppointments] = useState([])
-    const [cancelError, setCancelError] = useState("")
-    const [cancelLoading, setCancelLoading] = useState("")
+    const [cancelError, setCancelError] = useState({})
+    const [cancelLoading, setCancelLoading] = useState(false)
     const [cancelId, setCancelId] = useState("")
-    const [completeError, setCompleteError] = useState("")
-    const [completeLoading, setCompleteLoading] = useState("")
+    const [completeError, setCompleteError] = useState({})
+    const [completeLoading, setCompleteLoading] = useState(false)
     const [completeId, setCompleteId] = useState("")
 
     async function fetchAppointments() {
@@ -24,7 +24,11 @@ function BarberAppointmentsPage(){
             setAppointments(response.data)
         } catch(error) {
             if (error.response) {
-                setErrors({ general: error.response.data.detail || "A aparut o eroare."})
+                if (error.response.status === 403) {
+                    setErrors({ general: "Doar barberii pot vedea această pagină."})
+                } else {
+                    setErrors({ general: error.response.data.detail || "A aparut o eroare."})
+                }
             } else {
                 setErrors({ general: "Could not connect to the server."})
             }
@@ -48,9 +52,9 @@ function BarberAppointmentsPage(){
             fetchAppointments()
         } catch(error) {
             if (error.response) {
-                setCancelError({ general: error.response.data.detail || "A aparut o eroare."})
+                setCancelError({ general: error.response.data.detail || "A aparut o eroare.", id: id})
             } else {
-                setCancelError({ general: "Could not connect to the server."})
+                setCancelError({ general: "Could not connect to the server." , id: id})
             }
         } finally {
             setCancelLoading(false)
@@ -70,9 +74,9 @@ function BarberAppointmentsPage(){
             fetchAppointments()
         } catch(error) {
             if (error.response) {
-                setCompleteError({general: error.response.data.detail || "A aparut o eroare."})
+                setCompleteError({general: error.response.data.detail || "A aparut o eroare.", id: id})
             } else {
-                setCompleteError({general: "Could not connect to the server."})
+                setCompleteError({general: "Could not connect to the server.", id: id})
             }
         } finally {
             setCompleteLoading(false)
@@ -91,9 +95,23 @@ function BarberAppointmentsPage(){
 
             <div>
                 {appointments.map((appointment) => {
+                    const isCancelling = appointment.id === cancelId
+                    const isCompleting = appointment.id === completeId
                     return(
                         <div key={appointment.id}>
                             {appointment.start_time} - {appointment.status}
+                            {appointment.status === "booked" && ( 
+                            <> <button disabled={isCancelling} onClick={() => cancelAppointment(appointment.id)}>
+                                { isCancelling ? "Se anuleaza..." : "Anuleaza" }
+                            </button>
+                            {appointment.id === cancelError.id && <FormError error={cancelError.general} />}
+
+                            <button disabled={isCompleting} onClick={() => completeAppointment(appointment.id)}>
+                                { isCompleting ? "Se completeaza..." : "Completeaza" }
+                            </button>
+                            {appointment.id === completeError.id && <FormError error={completeError.general} />}
+
+                            </>)}
                         </div>
                     )
                 })}
