@@ -12,6 +12,7 @@ function Navbar() {
                 <li><NavLink to="/login">Login</NavLink></li>
                 <li><NavLink to="/register">Register</NavLink></li>
                 <li><NavLink to="/appointments">Appointments</NavLink></li>
+                <li><NavLink to="/barber/appointments">Barber Appointments</NavLink></li>
             </ul>
         </nav>
     )
