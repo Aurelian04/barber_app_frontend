@@ -4,7 +4,7 @@ import FormError from "../components/FormError"
 
 
 function BarberAppointmentsPage(){
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     const [errors, setErrors] = useState({})
     const [appointments, setAppointments] = useState([])
     const [cancelError, setCancelError] = useState({})
@@ -88,10 +88,11 @@ function BarberAppointmentsPage(){
         <div>
             <div>
                 {loading && <p>Se incarca...</p>}
-                <p>Your appointments are:</p>
+                {appointments.length > 0 && <p>Your appointments are:</p>}
             </div>
 
             <FormError error={errors.general} />
+            {!loading && !errors.general && appointments.length === 0 && <p>Nu ai programari.</p>}
 
             <div>
                 {appointments.map((appointment) => {
