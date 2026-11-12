@@ -9,6 +9,7 @@ import BarbersPage from "./pages/BarbersPage"
 import AvailabilityPage from "./pages/AvailabilityPage"
 import AppointmentsPage from "./pages/AppointmentsPage"
 import BarberAppointmentsPage from "./pages/BarberAppointmentsPage"
+import BarberSchedulePage from "./pages/BarberSchedulePage"
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/availability/:barberId/:serviceId" element={<AvailabilityPage />} />
         <Route path="/appointments" element={<AppointmentsPage />} />
         <Route path="/barber/appointments" element={<BarberAppointmentsPage />} />
+        <Route path="/barber/schedule" element={<BarberSchedulePage />} />
       </Routes>
     </>
   )
