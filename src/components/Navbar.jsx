@@ -13,6 +13,7 @@ function Navbar() {
                 <li><NavLink to="/register">Register</NavLink></li>
                 <li><NavLink to="/appointments">Appointments</NavLink></li>
                 <li><NavLink to="/barber/appointments">Barber Appointments</NavLink></li>
+                <li><NavLink to="/barber/schedule">Barber Schedule</NavLink></li>
             </ul>
         </nav>
     )
