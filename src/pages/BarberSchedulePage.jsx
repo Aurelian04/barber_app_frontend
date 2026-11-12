@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import api from "../api/axios"
+import { MESSAGES } from "../messages"
 
 const days ={
     1: "Monday",
@@ -26,9 +27,9 @@ function BarberSchedulePage() {
             setWeeklySchedule(response.data)
         } catch(error) {
             if (error.response) {
-                setErrors({general: error.response.data.detail || "A aparut o eroare."})
+                setErrors({general: error.response.data.detail || MESSAGES.general})
             } else {
-                setErrors({general: "Could not connect to the server."})
+                setErrors({general: MESSAGES.server})
             }
         } finally {
             setLoading(false)
