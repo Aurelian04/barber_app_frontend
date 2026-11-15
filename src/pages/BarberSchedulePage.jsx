@@ -27,9 +27,9 @@ function BarberSchedulePage() {
             setWeeklySchedule(response.data)
         } catch(error) {
             if (error.response) {
-                setErrors({general: error.response.data.detail || MESSAGES.general})
+                setErrors({general: error.response.data.detail || MESSAGES.genericError})
             } else {
-                setErrors({general: MESSAGES.server})
+                setErrors({general: MESSAGES.networkError})
             }
         } finally {
             setLoading(false)

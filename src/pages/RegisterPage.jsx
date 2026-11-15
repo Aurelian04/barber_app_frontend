@@ -2,6 +2,7 @@ import { useState } from "react"
 import axios from "axios"
 import { useNavigate } from "react-router"
 import FormError from "../components/FormError"
+import { MESSAGES } from "../messages"
 
 function RegisterPage() {
     const navigate = useNavigate()
@@ -44,7 +45,7 @@ function RegisterPage() {
                 setErrors(error.response.data)
             } else {
                 setErrors({
-                    general: "Could not connect to the server."
+                    general: MESSAGES.networkError
                 })
             }
         } finally {

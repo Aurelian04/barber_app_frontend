@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react"
 import api from "../api/axios"
 import FormError from "../components/FormError"
+import { MESSAGES } from "../messages"
 
 function AppointmentsPage(){
     const [appointments, setAppointments] = useState([])
-    const [loading, setLoading] = useState("")
-    const [cancelLoading, setCancelLoading] = useState("")
+    const [loading, setLoading] = useState(true)
+    const [cancelLoading, setCancelLoading] = useState(false)
     const [cancelId, setCancelId] = useState("")
     const [errors, setErrors] = useState("")
     const [cancelError, setCancelError] = useState("")
@@ -21,9 +22,9 @@ function AppointmentsPage(){
             setAppointments(response.data)
         } catch (error) {
             if (error.response) {
-                setErrors({ general: error.response.data.detail || "A aparut o eroare."})
+                setErrors({ general: error.response.data.detail || MESSAGES.genericError})
             } else {
-                setErrors({general: "Could not connect to the server."})
+                setErrors({general: MESSAGES.networkError})
             }
         } finally {
             setLoading(false)
@@ -45,9 +46,9 @@ function AppointmentsPage(){
             fetchAppointments()
         } catch(error) {
             if (error.response) {
-                setCancelError({general: error.response.data.detail || "A aparut o eroare."})
+                setCancelError({general: error.response.data.detail || MESSAGES.genericError})
             } else {
-                setCancelError({general: "Could not connect to the server."})
+                setCancelError({general: MESSAGES.networkError})
             }
         } finally {
             setCancelLoading(false)
@@ -58,7 +59,7 @@ function AppointmentsPage(){
     return(
         <div>
             <div>
-                {loading && <p>Se incarca...</p>}
+                {loading && <p>Loading...</p>}
                 Your appointments are:
             </div>
 
@@ -72,7 +73,7 @@ function AppointmentsPage(){
                             {appointment.start_time} - {appointment.status}
                             {appointment.status === "booked" && (
                                 <button disabled={isCancelling} onClick={() => cancelAppointment(appointment.id)}>
-                                    {isCancelling ? "Is cancelling..." : "Cancel"}
+                                    {isCancelling ? "Cancelling..." : "Cancel"}
                                 </button>
                             )}
                         </div>

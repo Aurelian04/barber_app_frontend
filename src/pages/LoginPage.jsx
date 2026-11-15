@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useNavigate } from "react-router"
-import api from "../api/axios" 
+import api from "../api/axios"
+import { MESSAGES } from "../messages"
 
 
 function LoginPage() {
@@ -36,7 +37,7 @@ function LoginPage() {
             if (error.response) {
                 setError(error.response.data.detail)
             } else {
-                setError("Could not connect to the server.")
+                setError(MESSAGES.networkError)
             }
         } finally {
             setIsLoading(false)

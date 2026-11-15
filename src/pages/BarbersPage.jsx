@@ -2,6 +2,7 @@ import api from "../api/axios";
 import { useState, useEffect } from "react";
 import FormError from "../components/FormError";
 import { Link } from "react-router";
+import { MESSAGES } from "../messages";
 
 function BarbersPage() {
     const [barbers, setBarbers] = useState([])
@@ -18,9 +19,9 @@ function BarbersPage() {
             setBarbers(response.data)
         } catch (error){
             if (error.response) {
-                setErrors({ general: error.response.data.detail || "A apărut o eroare." })
+                setErrors({ general: error.response.data.detail || MESSAGES.genericError })
             } else {
-                setErrors({general: "Could not connect to the server."})
+                setErrors({general: MESSAGES.networkError})
             }
         } finally {
             setLoading(false)
@@ -34,14 +35,14 @@ function BarbersPage() {
     return(
         <div>
             <div>
-                {loading && <p>Se incarca...</p>}
+                {loading && <p>Loading...</p>}
                 All Barbers and thier services:
             </div>
 
             <FormError error={errors.general} />
 
             <div>
-                <h2>Lista cu frizerii:</h2>
+                <h2>List of barbers:</h2>
                 {barbers.map((barber) => (
                     <Link key={barber.id} to={`/services/${barber.id}`}>
                         <div>{barber.first_name} {barber.last_name}</div>

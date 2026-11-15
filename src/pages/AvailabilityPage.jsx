@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import api from "../api/axios"
 import { useParams } from "react-router"
 import FormError from "../components/FormError"
+import { MESSAGES } from "../messages"
 
 function AvailabilityPage(){
     const [errors, setErrors] = useState("")
@@ -31,9 +32,9 @@ function AvailabilityPage(){
                 setAvailableSlots(response.data.slots)
             } catch (error) {
                 if (error.response) {
-                    setErrors({ general: error.response.data.detail || "A apărut o eroare." })
+                    setErrors({ general: error.response.data.detail || MESSAGES.genericError })
                 } else {
-                    setErrors({general: "Could not connect to the server."})
+                    setErrors({general: MESSAGES.networkError})
                 }
             } finally {
                 setLoading(false)
@@ -66,9 +67,9 @@ function AvailabilityPage(){
 
             } catch(error) {
                 if (error.response) {
-                    setBookingError({general: error.response.data.detail || "A aparut o eroare."})
+                    setBookingError({general: error.response.data.detail || MESSAGES.genericError})
                 } else {
-                    setBookingError({general: "Could not connect to the server."})
+                    setBookingError({general: MESSAGES.networkError})
                 }
             } finally {
                 setBookingLoading(false)
@@ -80,7 +81,7 @@ function AvailabilityPage(){
     return(
         <div>
             <div>
-                {loading && <p>Se incarca...</p>}
+                {loading && <p>Loading...</p>}
                 Available slots:
             </div>
 

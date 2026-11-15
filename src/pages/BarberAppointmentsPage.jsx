@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import api from "../api/axios"
 import FormError from "../components/FormError"
+import { MESSAGES } from "../messages"
 
 
 function BarberAppointmentsPage(){
@@ -25,12 +26,12 @@ function BarberAppointmentsPage(){
         } catch(error) {
             if (error.response) {
                 if (error.response.status === 403) {
-                    setErrors({ general: "Doar barberii pot vedea această pagină."})
+                    setErrors({ general: "Only barbers can see this page."})
                 } else {
-                    setErrors({ general: error.response.data.detail || "A aparut o eroare."})
+                    setErrors({ general: error.response.data.detail || MESSAGES.genericError})
                 }
             } else {
-                setErrors({ general: "Could not connect to the server."})
+                setErrors({ general: MESSAGES.networkError})
             }
         } finally {
             setLoading(false)
@@ -52,9 +53,9 @@ function BarberAppointmentsPage(){
             fetchAppointments()
         } catch(error) {
             if (error.response) {
-                setCancelError({ general: error.response.data.detail || "A aparut o eroare.", id: id})
+                setCancelError({ general: error.response.data.detail || MESSAGES.genericError, id: id})
             } else {
-                setCancelError({ general: "Could not connect to the server." , id: id})
+                setCancelError({ general: MESSAGES.networkError , id: id})
             }
         } finally {
             setCancelLoading(false)
@@ -74,9 +75,9 @@ function BarberAppointmentsPage(){
             fetchAppointments()
         } catch(error) {
             if (error.response) {
-                setCompleteError({general: error.response.data.detail || "A aparut o eroare.", id: id})
+                setCompleteError({general: error.response.data.detail || MESSAGES.genericError, id: id})
             } else {
-                setCompleteError({general: "Could not connect to the server.", id: id})
+                setCompleteError({general: MESSAGES.networkError, id: id})
             }
         } finally {
             setCompleteLoading(false)
@@ -87,12 +88,12 @@ function BarberAppointmentsPage(){
     return(
         <div>
             <div>
-                {loading && <p>Se incarca...</p>}
+                {loading && <p>Loading...</p>}
                 {appointments.length > 0 && <p>Your appointments are:</p>}
             </div>
 
             <FormError error={errors.general} />
-            {!loading && !errors.general && appointments.length === 0 && <p>Nu ai programari.</p>}
+            {!loading && !errors.general && appointments.length === 0 && <p>You don't have any appointments.</p>}
 
             <div>
                 {appointments.map((appointment) => {
@@ -103,12 +104,12 @@ function BarberAppointmentsPage(){
                             {appointment.start_time} - {appointment.status}
                             {appointment.status === "booked" && ( 
                             <> <button disabled={isCancelling} onClick={() => cancelAppointment(appointment.id)}>
-                                { isCancelling ? "Se anuleaza..." : "Anuleaza" }
+                                { isCancelling ? "Cancelling..." : "Cancel" }
                             </button>
                             {appointment.id === cancelError.id && <FormError error={cancelError.general} />}
 
                             <button disabled={isCompleting} onClick={() => completeAppointment(appointment.id)}>
-                                { isCompleting ? "Se completeaza..." : "Completeaza" }
+                                { isCompleting ? "Completing..." : "Complete" }
                             </button>
                             {appointment.id === completeError.id && <FormError error={completeError.general} />}
 
