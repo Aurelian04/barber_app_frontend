@@ -3,7 +3,7 @@ import api from "../api/axios"
 import { MESSAGES } from "../messages"
 import FormError from "../components/FormError"
 
-const days ={
+const days = {
     1: "Monday",
     2: "Tuesday",
     3: "Wednesday",
@@ -17,20 +17,23 @@ function BarberSchedulePage() {
     const [loading, setLoading] = useState(true)
     const [weeklySchedule, setWeeklySchedule] = useState([])
     const [errors, setErrors] = useState({})
+    const [startTime, setStartTime] = useState("")
+    const [endTime, setEndTime] = useState("")
+    const [weekday, setWeekday] = useState(1)
 
     async function fetchWeeklySchedule() {
 
         setErrors({})
         setLoading(true)
 
-        try{
+        try {
             const response = await api.get("barber/weekly-schedules/")
             setWeeklySchedule(response.data)
-        } catch(error) {
+        } catch (error) {
             if (error.response) {
-                setErrors({general: error.response.data.detail || MESSAGES.genericError})
+                setErrors({ general: error.response.data.detail || MESSAGES.genericError })
             } else {
-                setErrors({general: MESSAGES.networkError})
+                setErrors({ general: MESSAGES.networkError })
             }
         } finally {
             setLoading(false)
@@ -38,9 +41,9 @@ function BarberSchedulePage() {
     }
     useEffect(() => {
         fetchWeeklySchedule()
-    },[])
+    }, [])
 
-    return(
+    return (
         <div>
             <div>
                 {loading && <p>Loading...</p>}
@@ -52,13 +55,44 @@ function BarberSchedulePage() {
 
             <div>
                 {weeklySchedule.map((weeklySchedule) => {
-                    return(
+                    return (
                         <div key={weeklySchedule.id}>
                             {days[weeklySchedule.weekday]}
-                            {" "} 
+                            {" "}
                             {weeklySchedule.start_time.slice(0, 5)} - {weeklySchedule.end_time.slice(0, 5)}
                         </div>
-                    )})}
+                    )
+                })}
+            </div>
+
+            <div>
+                <form>
+                    <div>
+                        <label htmlFor="weekday">Weekday</label>
+                        <select id="weekday" value={weekday} onChange={(e) => setWeekday(e.target.value)}>
+                            <option value={1}>Monday</option>
+                            <option value={2}>Tuesday</option>
+                            <option value={3}>Wednesday</option>
+                            <option value={4}>Thursday</option>
+                            <option value={5}>Friday</option>
+                            <option value={6}>Saturday</option>
+                            <option value={7}>Sunday</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label htmlFor="startTime">Start Time</label>
+                        <input id="startTime" type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
+                    </div>
+
+                    <div>
+                        <label htmlFor="endTime">End Time</label>
+                        <input id="endTime" type="time" value={endTime} onChange={(e) => setEndTime(e.target.value)} />
+                    </div>
+
+                    <button>Add</button>
+
+                </form>
             </div>
 
         </div>
